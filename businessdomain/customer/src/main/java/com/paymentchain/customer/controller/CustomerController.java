@@ -49,6 +49,10 @@ public class CustomerController {
             String productName = service.getProductNameById(p.getProductId());
             p.setProductName(productName);
         });
+
+        List<?> transactions = service.getTransactionsByIban(customer.getIban());
+        customer.setTransactions(transactions);
+
         return ResponseEntity.status(HttpStatus.OK).body(customer);
     
     }

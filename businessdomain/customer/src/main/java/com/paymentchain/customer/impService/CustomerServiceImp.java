@@ -89,5 +89,20 @@ public class CustomerServiceImp implements CustomerService {
     public Customer getCustomerByCode(String code) {
         return repository.findByCode(code).get();
     }
+
+    @Override
+    public List<?> getTransactionsByIban(String Iban) {
+        WebClient build = wBuilder.clientConnector(new ReactorClientHttpConnector(client))
+                .baseUrl("http://localhost:8083/transaction")
+                .defaultHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)               
+                .build();
+
+        List<?> transactions = build.method(HttpMethod.GET).uri(uriBuilder -> uriBuilder
+                .path("/customer/transactions")
+                .queryParam("accountIban", Iban)               
+                .build())
+                .retrieve().bodyToFlux(Object.class).collectList().block();
+        return transactions;
+    }
     
 }

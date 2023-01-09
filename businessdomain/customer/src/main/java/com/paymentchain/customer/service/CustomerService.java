@@ -17,4 +17,6 @@ public interface CustomerService {
     void deleteCustomerById(long id);
 
     String getProductNameById(long idProduct);
+
+    List<?> getTransactionsByIban(String Iban);
 }
