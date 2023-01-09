@@ -13,4 +13,6 @@ public interface CustomerService {
     void saveCustomer(Customer customer);
 
     void deleteCustomerById(long id);
+
+    String getProductNameById(long idProduct);
 }
