@@ -1,12 +1,16 @@
 package com.paymentchain.customer.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.paymentchain.customer.entities.Customer;
+import com.paymentchain.customer.entities.CustomerProduct;
 import com.paymentchain.customer.service.CustomerService;
 
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -15,6 +19,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.PutMapping;
+
 
 
 
@@ -36,6 +41,17 @@ public class CustomerController {
         return ResponseEntity.status(HttpStatus.OK).body(service.getCustomerById(id));
     }
 
+    @GetMapping(value="/bycode")
+    public ResponseEntity<?> findCustomerByCode(@RequestParam String code) {
+        Customer customer =service.getCustomerByCode(code);
+        List<CustomerProduct> products = customer.getProducts();
+        products.forEach(p -> {
+            String productName = service.getProductNameById(p.getProductId());
+            p.setProductName(productName);
+        });
+        return ResponseEntity.status(HttpStatus.OK).body(customer);
+    
+    }
     @PostMapping(value="/")
     public ResponseEntity<?> saveCustomer(@RequestBody Customer customer) {
         customer.getProducts().forEach(p -> p.setCustomer(customer));
@@ -45,7 +61,7 @@ public class CustomerController {
     
     @PutMapping(value="/{id}")
     public ResponseEntity<?> updateCustomer(@PathVariable("id") long id, @RequestBody Customer customer) {
-        customer.setId(id);
+        customer.setCustomerId(id);
         service.saveCustomer(customer);
         return ResponseEntity.status(HttpStatus.OK).body("Updated");
     }

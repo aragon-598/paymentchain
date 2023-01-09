@@ -84,5 +84,10 @@ public class CustomerServiceImp implements CustomerService {
         String name = block.get("name").asText();
         return name;
     }
+
+    @Override
+    public Customer getCustomerByCode(String code) {
+        return repository.findByCode(code).get();
+    }
     
 }
