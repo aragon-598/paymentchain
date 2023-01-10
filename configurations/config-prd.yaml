@@ -1,0 +1,15 @@
+user:
+  role: Developer
+  alias: aragon
+spring:
+  jpa:
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL8Dialect
+    hibernate:
+      ddlAuto: create-drop
+    showSql: true  
+  datasource:
+    url: jdbc:mysql://localhost:3306/paymentchain
+    username: root
+    password: 12345

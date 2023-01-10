@@ -1,0 +1,11 @@
+user:
+  role: Developer
+  alias: aragon
+spring:
+  jpa:
+    showSql: true
+  datasource:
+    url: jdbc:h2:mem:bank
+    username: aragon
+    password: 12345
+    driverClassName: org.h2.Driver
