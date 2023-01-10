@@ -7,8 +7,8 @@ spring:
       hibernate:
         dialect: org.hibernate.dialect.MySQL8Dialect
     hibernate:
-      ddlAuto: create-drop
-    showSql: true  
+      ddl-auto: create-drop
+    show-sql: true  
   datasource:
     url: jdbc:mysql://localhost:3306/paymentchain
     username: root
