@@ -74,9 +74,9 @@ public class CustomerServiceImp implements CustomerService {
     @Override
     public String getProductNameById(long idProduct) {
         WebClient build = wBuilder.clientConnector(new ReactorClientHttpConnector(client))
-                                    .baseUrl("http://localhost:8082/product")
+                                    .baseUrl("http://businessdomain-product/product")
                                     .defaultHeader(HttpHeaders.CONTENT_TYPE,MediaType.APPLICATION_JSON_VALUE)
-                                    .defaultUriVariables(Collections.singletonMap("url", "http://localhost:8082/product"))
+                                    .defaultUriVariables(Collections.singletonMap("url", "http://businessdomain-product/product"))
                                     .build();
         JsonNode block = build.method(HttpMethod.GET).uri("/"+idProduct)
                                 .retrieve().bodyToMono(JsonNode.class)
@@ -93,7 +93,7 @@ public class CustomerServiceImp implements CustomerService {
     @Override
     public List<?> getTransactionsByIban(String Iban) {
         WebClient build = wBuilder.clientConnector(new ReactorClientHttpConnector(client))
-                .baseUrl("http://localhost:8083/transaction")
+                .baseUrl("http://businessdomain-transacction/transaction")
                 .defaultHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)               
                 .build();
 
