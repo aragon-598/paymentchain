@@ -1,6 +1,10 @@
 package com.paymentchain.product.controller;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
@@ -25,8 +29,12 @@ public class ProductController {
     @Autowired
     ProductService service;
 
+    @Value("${user.role}")
+    private String role;
+
     @GetMapping(value="/")
     public ResponseEntity<?> findAllProducts() {
+        Logger.getLogger(getClass().getName()).log(Level.INFO, "AQUI ESTA EL ROL DESDE CONFIG SERVER =====>"+role);
         return ResponseEntity.status(HttpStatus.OK).body(service.getAllProducts());
     }
 
