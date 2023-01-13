@@ -1,0 +1,17 @@
+---
+spring:
+  cloud:
+    config:
+      discovery:
+        enabled: true
+        service-id: config-server
+      failFast: true
+      #name of base properties config file, before profile
+      name: config
+      profile: dev
+      #label: latest
+      username: aragon
+      password: ale123
+      retry:
+        max-attempts: 1
+        max-interval: 1000

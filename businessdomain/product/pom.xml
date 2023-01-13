@@ -12,13 +12,13 @@
 	<version>0.0.1-SNAPSHOT</version>
 	<name>product</name>
 	<description>Product microservice for paymentchain project</description>
-	<dependencies>        
+	<!-- <dependencies>        
 		<dependency>
 		   <groupId>org.yaml</groupId>
-		   <artifactId>snakeyaml</artifactId>
+		   <artifactId>snakeyaml</artifactId>  COMMON DEPENDENCY
 		   <version>1.27</version>
 	   </dependency>
-   </dependencies>
+   </dependencies> -->
 
 	<build>
 		<plugins>

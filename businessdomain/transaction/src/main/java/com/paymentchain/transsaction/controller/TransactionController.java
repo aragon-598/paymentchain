@@ -1,6 +1,9 @@
 package com.paymentchain.transsaction.controller;
 
+import org.jboss.logging.Logger;
+import org.jboss.logging.Logger.Level;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -25,6 +28,16 @@ import org.springframework.web.bind.annotation.PutMapping;
 public class TransactionController {
     @Autowired
     TransactionService service;
+
+    @Value("${user.alias}")
+    private String alias;
+
+    @GetMapping(value="/all")
+    public ResponseEntity<?> findAllTransactions() {
+        Logger.getLogger(getClass().getName()).log(Level.INFO, "ALIAS ====>"+alias);
+        return ResponseEntity.status(HttpStatus.OK).body(service.getAllTransactions());
+    }
+    
 
     @GetMapping(value="/customer/transactions")
     public ResponseEntity<?> findAllTransactionsByAccountIban(@RequestParam String accountIban) {

@@ -1,8 +1,11 @@
 package com.paymentchain.customer.controller;
 
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,18 +24,18 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.PutMapping;
 
 
-
-
-
-
 @RestController
 @RequestMapping("/customer")
 public class CustomerController {
     @Autowired
     CustomerService service;
 
+    @Value("${spring.datasource.username}")
+    private String usernameDB;
+
     @GetMapping(value="/")
     public ResponseEntity<?> findAllCustomers() {
+        Logger.getLogger(getClass().getName()).log(Level.INFO, "USERNAME ====>"+usernameDB);
         return ResponseEntity.status(HttpStatus.OK).body(service.getAllCustomers());
     }
     
