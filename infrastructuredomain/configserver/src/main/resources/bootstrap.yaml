@@ -1,0 +1,25 @@
+# ---
+# server:
+#   port: 8888
+# spring:
+#   application:
+#     name: config-server
+#   cloud:
+#     config:
+#       server:
+#         bootstrap: true
+#         git:
+#           uri: ${REPOSITORY:https://github.com/aragon-598/paymentchain}
+#           username: aragon-598
+#           password: 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
+#           search-paths: configurations
+#           default-label: master
+#           clone-on-start: true
+#   security:
+#     user:
+#       name: aragon
+#       password: ale123
+# eureka:
+#   client:
+#     serviceUrl:
+#       defaulZone: ${EUREKA_SERVER:http://localhost:8761/eureka}

@@ -1,0 +1,94 @@
+version: '3.0'
+services:
+############################################################################
+############# EUREKA SERVER CONFIGURATION
+############################################################################
+  eureka-server:
+    container_name: eurekaserver_container
+    image: eureka-server
+    ports:
+      - "8761:8761"
+    environment:
+      - JAVA_OPTS=
+        - Xms256M 
+        - Xmx256M
+    networks:
+      - paymentchain_network
+############################################################################
+############# CONFIG SERVER CONFIGURATION
+############################################################################
+  config-server:
+    container_name: confserver_container
+    image: config-server
+    ports:
+      - "8888:8888"
+    environment:
+      - EUREKA_SERVER=http://eureka-server:8761/eureka/
+      - REPOSITORY=https://github.com/aragon-598/paymentchain
+    depends_on:
+      - eureka-server
+    networks:
+      - paymentchain_network
+############################################################################
+############# ADMIN SERVER CONFIGURATION
+############################################################################
+  admin-server:
+    container_name: adminserver_container
+    image: admin-server
+    ports:
+      - "8762:8762"
+    environment:
+      - EUREKA_SERVER=http://eureka-server:8761/eureka/
+    depends_on:
+      - eureka-server
+    networks:
+      - paymentchain_network
+############################################################################
+############# CUSTOMER CONFIGURATION
+############################################################################  
+  customer-mservice:
+    container_name: customer_container
+    image: customer-service
+    ports:
+      - "8081:8081"
+    environment:
+      - EUREKA_SERVER=http://eureka-server:8761/eureka/
+    depends_on:
+      - eureka-server
+      - config-server
+    networks:
+      - paymentchain_network
+############################################################################
+############# PRODUCT CONFIGURATION
+############################################################################
+  product-mservice:
+    container_name: product_container
+    image: product-service
+    ports:
+      - "8082:8082"
+    environment:
+      - EUREKA_SERVER=http://eureka-server:8761/eureka/
+    depends_on:
+      - eureka-server
+      - config-server
+    networks:
+      - paymentchain_network
+############################################################################
+############# TRANSACTION CONFIGURATION
+############################################################################ 
+  transaction-mservice:
+    container_name: transaction_container
+    image: transaction-service
+    ports:
+      - "8083:8083"
+    environment:
+      - EUREKA_SERVER=http://eureka-server:8761/eureka/
+    depends_on:
+      - eureka-server
+      - config-server
+    networks:
+      - paymentchain_network
+      
+networks:
+  paymentchain_network:
+    driver: bridge 
