@@ -18,7 +18,7 @@ import lombok.Data;
 @Data
 public class Customer implements Serializable {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO  )
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long customerId;
     private String code;
     private String Iban;

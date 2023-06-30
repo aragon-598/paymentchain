@@ -20,7 +20,7 @@ spring:
       failFast: true
       #name of base properties config file, before profile
       name: config
-      profile: dev
+      profile: prd
       #label: latest
       username: aragon
       password: ale123

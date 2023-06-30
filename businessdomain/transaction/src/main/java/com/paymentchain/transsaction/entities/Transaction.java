@@ -15,7 +15,7 @@ public class Transaction implements Serializable {
     private static final long serialVersionUID= 1L;
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long idTransaction;
     private String reference;
     private String accountIban;
