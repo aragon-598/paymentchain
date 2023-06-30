@@ -37,5 +37,10 @@ public class ProductServiceImp implements ProductService {
     public void deleteProductById(long id) {
         repository.deleteById(id);
     }
+
+    @Override
+    public boolean existById(long id) {
+        return repository.existsById(id);
+    }
     
 }

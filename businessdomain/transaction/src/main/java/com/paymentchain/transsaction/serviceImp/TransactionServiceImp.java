@@ -19,37 +19,41 @@ public class TransactionServiceImp implements TransactionService {
 
     @Override
     public List<Transaction> getAllTransactions() {
-        // TODO Auto-generated method stub
         return repository.findAll();
     }
 
     @Override
     public List<Transaction> getTransactionsByAccountIban(String accountIban) {
-        // TODO Auto-generated method stub
         return repository.findAllByAccountIban(accountIban);
     }
 
     @Override
     public Transaction getTransactionById(long id) {
-        // TODO Auto-generated method stub
         return repository.findById(id).get();
     }
 
     @Override
     public Transaction getTransactionByReference(String reference) {
-        // TODO Auto-generated method stub
         return repository.findByReference(reference);
     }
 
     @Override
     public void saveTransaction(Transaction transaction) {
-        // TODO Auto-generated method stub
         repository.save(transaction);
     }
 
     @Override
     public void deleteTransactionById(long id) {
-        // TODO Auto-generated method stub
         repository.deleteById(id);
+    }
+
+    @Override
+    public boolean existsById(long id) {
+        return repository.existsById(id);
+    }
+
+    @Override
+    public boolean existsByAccountIban(String accountIban) {
+        return repository.existsByAccountIban(accountIban);
     }
 }

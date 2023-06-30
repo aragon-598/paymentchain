@@ -104,5 +104,10 @@ public class CustomerServiceImp implements CustomerService {
                 .retrieve().bodyToFlux(Object.class).collectList().block();
         return transactions;
     }
+
+    @Override
+    public boolean existsById(long id) {
+        return repository.existsById(id);
+    }
     
 }

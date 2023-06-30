@@ -1,5 +1,6 @@
 package com.paymentchain.product.controller;
 
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -35,31 +36,57 @@ public class ProductController {
     @GetMapping(value="/")
     public ResponseEntity<?> findAllProducts() {
         Logger.getLogger(getClass().getName()).log(Level.INFO, "AQUI ESTA EL ROL DESDE CONFIG SERVER =====>"+role);
-        return ResponseEntity.status(HttpStatus.OK).body(service.getAllProducts());
+        List<Product> allProducts = service.getAllProducts();
+        if (allProducts.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).body(service.getAllProducts());
+        } else {
+            return ResponseEntity.status(HttpStatus.OK).body(service.getAllProducts());
+        }
     }
 
     @GetMapping(value="/{id}")
     public ResponseEntity<?> findProductById(@PathVariable("id")long id) {
-        return ResponseEntity.status(HttpStatus.OK).body(service.getProductById(id));
+        
+        Product productById = service.getProductById(id);
+        
+        if (productById!=null) {
+            return ResponseEntity.status(HttpStatus.OK).body(service.getProductById(id));   
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No se encontro el producto");    
+        }
     }
 
     @PostMapping(value="/")
     public ResponseEntity<?> saveProduct(@RequestBody Product product) {
         service.saveProduct(product);
-        return ResponseEntity.status(HttpStatus.OK).body("Saved");
+        return ResponseEntity.status(HttpStatus.CREATED).body("Saved");
     }
 
     @PutMapping(value="/{id}")
     public ResponseEntity<?> updateProduct(@PathVariable("id") long id, @RequestBody Product product) {
-        product.setId(id);
-        service.saveProduct(product);
-        return ResponseEntity.status(HttpStatus.OK).body("Updated");
+        
+        boolean oldProductExists = service.existById(id);
+        
+        if (oldProductExists) {
+            product.setId(id);
+            service.saveProduct(product);
+            return ResponseEntity.status(HttpStatus.OK).body("Producto actualizado");
+        } else {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Producto no se pudo actualizar porque no existe");    
+        }
+        
     }
     
     @DeleteMapping(value="/{id}")
     public ResponseEntity<?> deleteProductById(@PathVariable("id")long id) {
-        service.deleteProductById(id);
-        return ResponseEntity.status(HttpStatus.OK).body("Deleted");
+        boolean exists = service.existById(id);
+
+        if (exists) {
+            service.deleteProductById(id);
+            return ResponseEntity.status(HttpStatus.OK).body("Deleted");
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Producto no se pudo eliminar porque no existe");
+        }
     }
     
     

@@ -16,4 +16,8 @@ public interface TransactionService{
     void saveTransaction(Transaction transaction);
 
     void deleteTransactionById(long id);
+
+    boolean existsById(long id);
+
+    boolean existsByAccountIban(String accountIban);
 }

@@ -19,4 +19,6 @@ public interface CustomerService {
     String getProductNameById(long idProduct);
 
     List<?> getTransactionsByIban(String Iban);
+
+    boolean existsById(long id);
 }

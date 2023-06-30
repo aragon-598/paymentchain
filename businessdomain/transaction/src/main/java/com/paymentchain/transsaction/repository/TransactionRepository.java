@@ -12,4 +12,6 @@ public interface TransactionRepository extends JpaRepository<Transaction, Long> 
 
     Transaction findByReference(String reference);
 
+    boolean existsByAccountIban(String accountIban);
+
 }

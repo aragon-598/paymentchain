@@ -36,27 +36,46 @@ public class CustomerController {
     @GetMapping(value="/")
     public ResponseEntity<?> findAllCustomers() {
         Logger.getLogger(getClass().getName()).log(Level.INFO, "USERNAME ====>"+usernameDB);
-        return ResponseEntity.status(HttpStatus.OK).body(service.getAllCustomers());
+        
+        List<Customer> allCustomers =service.getAllCustomers();
+
+        if (!allCustomers.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.OK).body(service.getAllCustomers());
+        } else {
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).body(service.getAllCustomers());
+        }
+
     }
     
     @GetMapping(value="/{id}")
     public ResponseEntity<?> findCustomerById(@PathVariable("id") long id) {
-        return ResponseEntity.status(HttpStatus.OK).body(service.getCustomerById(id));
+        boolean existe = service.existsById(id);
+
+        if (existe) {
+            return ResponseEntity.status(HttpStatus.OK).body(service.getCustomerById(id));
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No se encontro el customer");
+        }
     }
 
     @GetMapping(value="/bycode")
     public ResponseEntity<?> findCustomerByCode(@RequestParam String code) {
         Customer customer =service.getCustomerByCode(code);
-        List<CustomerProduct> products = customer.getProducts();
-        products.forEach(p -> {
-            String productName = service.getProductNameById(p.getProductId());
-            p.setProductName(productName);
-        });
 
-        List<?> transactions = service.getTransactionsByIban(customer.getIban());
-        customer.setTransactions(transactions);
+        if (customer!=null) {
+            List<CustomerProduct> products = customer.getProducts();
+            products.forEach(p -> {
+                String productName = service.getProductNameById(p.getProductId());
+                p.setProductName(productName);
+            });
 
-        return ResponseEntity.status(HttpStatus.OK).body(customer);
+            List<?> transactions = service.getTransactionsByIban(customer.getIban());
+            customer.setTransactions(transactions);
+
+            return ResponseEntity.status(HttpStatus.OK).body(customer);
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No se encontro al customer por el codigo");
+        }
     
     }
     @PostMapping(value="/")
@@ -68,15 +87,27 @@ public class CustomerController {
     
     @PutMapping(value="/{id}")
     public ResponseEntity<?> updateCustomer(@PathVariable("id") long id, @RequestBody Customer customer) {
-        customer.setCustomerId(id);
-        service.saveCustomer(customer);
-        return ResponseEntity.status(HttpStatus.OK).body("Updated");
+        boolean existe = service.existsById(id);
+
+        if (existe) {
+            customer.setCustomerId(id);
+            service.saveCustomer(customer);
+            return ResponseEntity.status(HttpStatus.OK).body("Updated");
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No se actualizo el customer porque no existe");
+        }
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteCustomer(@PathVariable("id")long id) {
-        service.deleteCustomerById(id);
-        return ResponseEntity.status(HttpStatus.OK).body("Deleted");
+        boolean existe = service.existsById(id);
+
+        if (existe) {
+            service.deleteCustomerById(id);
+            return ResponseEntity.status(HttpStatus.OK).body("Deleted");
+        } else {
+            return ResponseEntity.status(HttpStatus.OK).body("No se elimino el usuario porque no existe");
+        }
     }
     
 }

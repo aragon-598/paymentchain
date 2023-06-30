@@ -1,5 +1,7 @@
 package com.paymentchain.transsaction.controller;
 
+import java.util.List;
+
 import org.jboss.logging.Logger;
 import org.jboss.logging.Logger.Level;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,40 +37,67 @@ public class TransactionController {
     @GetMapping(value="/all")
     public ResponseEntity<?> findAllTransactions() {
         Logger.getLogger(getClass().getName()).log(Level.INFO, "ALIAS ====>"+alias);
-        return ResponseEntity.status(HttpStatus.OK).body(service.getAllTransactions());
+
+        List<Transaction> allTransactions = service.getAllTransactions();
+
+        if (!allTransactions.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.OK).body(service.getAllTransactions());
+        } else {
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).body(service.getAllTransactions());
+        }
     }
     
 
     @GetMapping(value="/customer/transactions")
     public ResponseEntity<?> findAllTransactionsByAccountIban(@RequestParam String accountIban) {
-        return ResponseEntity.status(HttpStatus.OK).body(service.getTransactionsByAccountIban(accountIban));
+        List<Transaction> transactionsByAccount = service.getTransactionsByAccountIban(accountIban);
+        if (!transactionsByAccount.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.OK).body(service.getTransactionsByAccountIban(accountIban));
+        } else {
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).body(service.getTransactionsByAccountIban(accountIban));
+        }
     }
 
     @GetMapping(value="/{reference}")
     public ResponseEntity<?> findTransactionByReference(@PathVariable String reference) {
-        return ResponseEntity.status(HttpStatus.OK).body(service.getTransactionByReference(reference));
+        Transaction transaction = service.getTransactionByReference(reference);
+
+        if (transaction!=null) {
+            return ResponseEntity.status(HttpStatus.OK).body(service.getTransactionByReference(reference));
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No se encontro la transacción");
+        }
     }
 
     @PostMapping(value="/")
     public ResponseEntity<?> saveTransaction(@RequestBody Transaction transaction) {
-        //TODO: process POST request
         service.saveTransaction(transaction);
         return ResponseEntity.ok("Created");
     }
     
     @PutMapping(value="/{id}")
     public ResponseEntity<?> updateTransaction(@PathVariable long id, @RequestBody Transaction transaction) {
-        //TODO: process PUT request
-        transaction.setIdTransaction(id);
-        service.saveTransaction(transaction);
-        return ResponseEntity.status(HttpStatus.OK).body("Updated");
+        Transaction oldTransaction = service.getTransactionById(id);
+
+        if (oldTransaction!=null) {
+            transaction.setIdTransaction(id);
+            service.saveTransaction(transaction);
+            return ResponseEntity.status(HttpStatus.OK).body("Updated");
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("La transaccion no se actualizo porque no se encontró");
+        }
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteTransaction(@PathVariable("id") long id) {
-        //TODO: process POST request
-        service.deleteTransactionById(id);
-        return ResponseEntity.ok("Deleted");
+        boolean exists = service.existsById(id);
+
+        if (exists) {
+            service.deleteTransactionById(id);
+            return ResponseEntity.ok("Deleted");
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("");
+        }
     }
     
 }
