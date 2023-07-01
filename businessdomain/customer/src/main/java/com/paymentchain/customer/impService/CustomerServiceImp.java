@@ -66,7 +66,7 @@ public class CustomerServiceImp implements CustomerService {
     @Override
     public Customer saveCustomer(Customer customer){
         customer.getProducts().forEach((dto)->{
-            String productName = getProductNameById(dto.getId());
+            String productName = getProductNameById(dto.getProductId());
             if (productName.isBlank()) {
                 BusinessRuleException exception = new BusinessRuleException("1029","Error de validacion, productos",HttpStatus.PRECONDITION_FAILED);
                 // Exception foo = new Exception();
