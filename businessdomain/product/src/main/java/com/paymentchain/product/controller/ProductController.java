@@ -47,9 +47,9 @@ public class ProductController {
     @GetMapping(value="/{id}")
     public ResponseEntity<?> findProductById(@PathVariable("id")long id) {
         
-        Product productById = service.getProductById(id);
+        boolean oldProductExists = service.existById(id);
         
-        if (productById!=null) {
+        if (oldProductExists) {
             return ResponseEntity.status(HttpStatus.OK).body(service.getProductById(id));   
         } else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No se encontro el producto");    

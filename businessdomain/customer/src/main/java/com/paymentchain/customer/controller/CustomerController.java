@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.paymentchain.customer.entities.Customer;
 import com.paymentchain.customer.entities.CustomerProduct;
+import com.paymentchain.customer.exception.BusinessRuleException;
 import com.paymentchain.customer.service.CustomerService;
 
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -79,14 +80,14 @@ public class CustomerController {
     
     }
     @PostMapping(value="/")
-    public ResponseEntity<?> saveCustomer(@RequestBody Customer customer) {
-        customer.getProducts().forEach(p -> p.setCustomer(customer));
+    public ResponseEntity<?> saveCustomer(@RequestBody Customer customer) throws BusinessRuleException {
+        
         service.saveCustomer(customer);
         return ResponseEntity.status(HttpStatus.OK).body("Created");
     }
     
     @PutMapping(value="/{id}")
-    public ResponseEntity<?> updateCustomer(@PathVariable("id") long id, @RequestBody Customer customer) {
+    public ResponseEntity<?> updateCustomer(@PathVariable("id") long id, @RequestBody Customer customer) throws BusinessRuleException {
         boolean existe = service.existsById(id);
 
         if (existe) {

@@ -9,6 +9,7 @@ import io.netty.handler.timeout.WriteTimeoutHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.client.reactive.ReactorClientHttpConnector;
 import org.springframework.stereotype.Service;
@@ -17,6 +18,7 @@ import org.springframework.web.reactive.function.client.WebClient;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.paymentchain.customer.entities.Customer;
+import com.paymentchain.customer.exception.BusinessRuleException;
 import com.paymentchain.customer.repository.CustomerRepository;
 import com.paymentchain.customer.service.CustomerService;
 
@@ -62,8 +64,22 @@ public class CustomerServiceImp implements CustomerService {
     }
 
     @Override
-    public void saveCustomer(Customer customer) {
-        repository.save(customer);
+    public Customer saveCustomer(Customer customer){
+        customer.getProducts().forEach((dto)->{
+            String productName = getProductNameById(dto.getId());
+            if (productName.isBlank()) {
+                BusinessRuleException exception = new BusinessRuleException("1029","Error de validacion, productos",HttpStatus.PRECONDITION_FAILED);
+                // Exception foo = new Exception();
+                try {
+                    throw exception;
+                } catch (Exception e) {
+                }
+                    //throw new BusinessRuleException("1029","Error de validacion, productos",HttpStatus.PRECONDITION_FAILED);
+            } else {
+                dto.setCustomer(customer);
+            }
+        });
+        return repository.save(customer);
     }
 
     @Override

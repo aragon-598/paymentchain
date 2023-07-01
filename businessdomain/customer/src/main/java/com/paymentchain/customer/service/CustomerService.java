@@ -12,7 +12,7 @@ public interface CustomerService {
 
     Customer getCustomerByCode(String code);
 
-    void saveCustomer(Customer customer);
+    Customer saveCustomer(Customer customer);
 
     void deleteCustomerById(long id);
 
