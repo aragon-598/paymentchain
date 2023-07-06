@@ -1,0 +1,44 @@
+---
+version: '3.5'
+services:
+  postgres_service:
+    container_name: postgres_DB
+    image: postgres
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-aragon}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-ajar24332}
+      PGDATA: /data/postgres
+    volumes:
+      - postgres_vol:/data/postgres
+    ports:
+      - '5433:5432'
+    networks:
+      - postgres_network
+    restart: always
+
+  keycloak:
+    image: jboss/keycloak
+    environment:
+      DB_VENDOR: POSTGRES
+      DB_ADDR: postgres_service
+      DB_DATABASE: postgres
+      DB_USER: "aragon"
+      DB_SCHEMA: "public"
+      DB_PASSWORD: "ajar24332"
+      KEYCLOAK_USER: "admin"
+      KEYCLOAK_PASSWORD: "admin"
+      # Uncomment the line below if you want to specify JDBC parameters. The parameter below is just an example, and it shouldn't be used in production without knowledge. It is highly recommended that you read the PostgreSQL JDBC driver documentation in order to use it.
+      #JDBC_PARAMS: "ssl=true"
+    ports:
+      - 8090:8080
+    networks:
+      - postgres_network
+    depends_on:
+      - postgres_service
+    restart: always
+
+networks:
+  postgres_network:
+    driver: bridge
+volumes:
+  postgres_vol:

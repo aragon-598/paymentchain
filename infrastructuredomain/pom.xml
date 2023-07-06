@@ -15,6 +15,7 @@
         <module>adminserver</module>
         <module>configserver</module>
         <module>apigateway</module>
+        <module>keycloak-adapter</module>
     </modules>
     <properties>
         <spring-cloud-dependencies.version>2021.0.4</spring-cloud-dependencies.version>
