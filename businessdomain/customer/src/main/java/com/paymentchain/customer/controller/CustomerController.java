@@ -47,7 +47,7 @@ public class CustomerController {
 
     @Operation(description = "Return all customers", summary = "Return 204 if no content data")
     @ApiResponses(value = {@ApiResponse(responseCode="200",description="Success")})
-    @GetMapping(value="/")
+    @GetMapping(value="/full")
     public ResponseEntity<?> findAllCustomers() {
         Logger.getLogger(getClass().getName()).log(Level.INFO, "USERNAME ====>"+usernameDB);
         

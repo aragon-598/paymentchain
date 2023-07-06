@@ -16,7 +16,7 @@ public interface CustomerResponseMapper {
 
     @Mappings({
                         //@Mapping(source = "Iban",target = "Iban"),
-                        @Mapping(source = "customerId",target = "customerId")
+                        // @Mapping(source = "customerId",target = "customerId")
                         })
     CustomerDto entityToDto(Customer source);
 
