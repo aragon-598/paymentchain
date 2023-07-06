@@ -3,7 +3,7 @@ springdoc:
   paths-to-match:
   - /customer/**
   packages-to-scan:
-  - com.paymentchain.customer.entities
+  - com.paymentchain.customer.dto
   - com.paymentchain.customer.controller
   swagger-ui:
       path: /swagger

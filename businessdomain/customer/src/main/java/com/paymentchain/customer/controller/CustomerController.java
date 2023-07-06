@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.paymentchain.customer.common.CustomerResponseMapper;
+import com.paymentchain.customer.dto.CustomerDto;
+import com.paymentchain.customer.dto.CustomerProductDto;
 import com.paymentchain.customer.entities.Customer;
 import com.paymentchain.customer.entities.CustomerProduct;
 import com.paymentchain.customer.exception.BusinessRuleException;
@@ -77,10 +79,10 @@ public class CustomerController {
     @ApiResponses(value = {@ApiResponse(responseCode="200",description="successful"),@ApiResponse(responseCode="500",description="Internal server error")})
     @GetMapping(value="/bycode")
     public ResponseEntity<?> findCustomerByCode(@RequestParam String code) {
-        Customer customer =service.getCustomerByCode(code);
+        CustomerDto customer =mapper.entityToDto(service.getCustomerByCode(code));
 
         if (customer!=null) {
-            List<CustomerProduct> products = customer.getProducts();
+            List<CustomerProductDto> products = customer.getProducts();
             products.forEach(p -> {
                 String productName = service.getProductNameById(p.getProductId());
                 p.setProductName(productName);
@@ -99,21 +101,21 @@ public class CustomerController {
     @Operation(description = "Save customer information", summary = "Return 201 if data is good")
     @ApiResponses(value = {@ApiResponse(responseCode="201",description="Succeded")})
     @PostMapping(value="/")
-    public ResponseEntity<?> saveCustomer(@RequestBody Customer customer) throws BusinessRuleException {
+    public ResponseEntity<?> saveCustomer(@RequestBody CustomerDto customer) throws BusinessRuleException {
         
-        service.saveCustomer(customer);
+        service.saveCustomer(mapper.dtoToEntity(customer));
         return ResponseEntity.status(HttpStatus.CREATED).body("Created");
     }
     
     @Operation(description = "Update customer information looking for id", summary = "Return 404 if the customer not exists")
     @ApiResponses(value = {@ApiResponse(responseCode="200",description="successful")})
     @PutMapping(value="/{id}")
-    public ResponseEntity<?> updateCustomer(@PathVariable("id") long id, @RequestBody Customer customer) throws BusinessRuleException {
+    public ResponseEntity<?> updateCustomer(@PathVariable("id") long id, @RequestBody CustomerDto customer) throws BusinessRuleException {
         boolean existe = service.existsById(id);
 
         if (existe) {
             customer.setCustomerId(id);
-            service.saveCustomer(customer);
+            service.saveCustomer(mapper.dtoToEntity(customer));
             return ResponseEntity.status(HttpStatus.OK).body("Updated");
         } else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No se actualizo el customer porque no existe");
