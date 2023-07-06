@@ -9,7 +9,7 @@ springdoc:
       path: /swagger
       enabled: true
 server:
-    port: 8081
+    port: 0
 eureka:
   client:
     serviceUrl:

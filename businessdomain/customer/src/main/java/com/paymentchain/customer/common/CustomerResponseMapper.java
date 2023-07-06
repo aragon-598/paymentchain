@@ -15,8 +15,8 @@ import com.paymentchain.customer.entities.Customer;
 public interface CustomerResponseMapper {
 
     @Mappings({
-                        // @Mapping(source = "Iban",target = "Iban"),
-                        // @Mapping(source = "customerId",target = "customerId")
+                        //@Mapping(source = "Iban",target = "Iban"),
+                        @Mapping(source = "customerId",target = "customerId")
                         })
     CustomerDto entityToDto(Customer source);
 
