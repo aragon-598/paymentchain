@@ -6,7 +6,7 @@ springdoc:
   - com.paymentchain.customer.dto
   - com.paymentchain.customer.controller
   swagger-ui:
-      path: /swagger
+      path: /customer-swagger
       enabled: true
 server:
     port: 0

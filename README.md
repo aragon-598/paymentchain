@@ -1,19 +1,60 @@
-# Getting Started
+# PaymentChain
+## Microservices Spring boot project
 
-### Reference Documentation
-For further reference, please consider the following sections:
+Proyecto de java spring boot para el manejo de microservicios, gateways, eureka server, keycloak etc.
+## Instrucciones
 
-* [Official Apache Maven documentation](https://maven.apache.org/guides/index.html)
-* [Spring Boot Maven Plugin Reference Guide](https://docs.spring.io/spring-boot/docs/2.7.7/maven-plugin/reference/html/)
-* [Create an OCI image](https://docs.spring.io/spring-boot/docs/2.7.7/maven-plugin/reference/html/#build-image)
-* [Spring Web](https://docs.spring.io/spring-boot/docs/2.7.7/reference/htmlsingle/#web)
+Consta de 8 proyectos spring boot
 
-### Guides
-The following guides illustrate how to use some features concretely:
+- Infraestructure domain: eurekaServer, configServer, apiGateway, adminServer y keycloakAdapter
+- Business domain: Product, Transaction y Customer
 
-* [Building a RESTful Web Service](https://spring.io/guides/gs/rest-service/)
-* [Serving Web Content with Spring MVC](https://spring.io/guides/gs/serving-web-content/)
-* [Building REST services with Spring](https://spring.io/guides/tutorials/rest/)
+Levantamos keycloak y DB
 
-### Description of project
-In this project i'm implementing a microservices with spring boot and spring cloud
+```sh
+cd keycloak/ && sudo docker compose up -d
+```
+
+Levantamos los servicios en el siguiente orden:
+
+- Eureka server
+- ConfigServer
+- ApiGateWay
+- AdminServer
+- KeyCloak Adapter
+- Customer service
+- Product service
+- Transaction service
+
+```sh 
+cd infraestructure/eurekaserver && mvn spring-boot:run
+cd infraestructure/configserver && mvn spring-boot:run
+cd infraestructure/apigateway && mvn spring-boot:run
+cd infraestructure/adminserver && mvn spring-boot:run
+cd infraestructure/keycloak-adapter && mvn spring-boot:run
+cd infraestructure/customer && mvn spring-boot:run
+cd infraestructure/product && mvn spring-boot:run
+cd infraestructure/transaction && mvn spring-boot:run
+```
+
+O en su defecto levantamos todos los servicios mediante docker compose y como requerimiento generamos los jar, en dado caso la maquina soporte los procesos, crear un dockerfile por servicio que genere los jar por si solo
+
+```sh 
+sudo docker compose up -d
+```
+
+## Ve a postman y consulta las url
+
+```sh 
+http://localhost:8000/customer/
+http://localhost:8000/product/
+http://localhost:8000/transaction/
+```
+
+Gracias al apigateway podemos acceder a todos los servicios mediante el mismo dominio
+
+## License
+
+MIT
+
+**Free Software!**
